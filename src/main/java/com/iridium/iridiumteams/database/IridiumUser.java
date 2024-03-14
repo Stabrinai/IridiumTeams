@@ -4,12 +4,12 @@ import com.iridium.iridiumteams.IridiumTeams;
 import com.iridium.iridiumteams.enhancements.*;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -40,7 +40,7 @@ public class IridiumUser<T extends Team> extends DatabaseObject {
 
     private String chatType = "";
 
-    private BukkitTask bukkitTask;
+    private ScheduledTask bukkitTask;
 
     private int bukkitTaskTicks = 0;
 
@@ -77,7 +77,7 @@ public class IridiumUser<T extends Team> extends DatabaseObject {
 
     public void initBukkitTask(IridiumTeams<T, ?> iridiumTeams) {
         if (bukkitTask != null) return;
-        bukkitTask = Bukkit.getScheduler().runTaskTimer(iridiumTeams, () -> bukkitTask(iridiumTeams), 0, 20);
+        bukkitTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(iridiumTeams, task -> bukkitTask(iridiumTeams), 1, 20);
     }
 
     public void bukkitTask(IridiumTeams<T, ?> iridiumTeams) {

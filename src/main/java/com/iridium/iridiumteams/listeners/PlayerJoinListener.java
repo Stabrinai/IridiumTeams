@@ -27,13 +27,13 @@ public class PlayerJoinListener<T extends Team, U extends IridiumUser<T>> implem
 
 
         if (player.isOp() && iridiumTeams.getConfiguration().patreonMessage) {
-            Bukkit.getScheduler().runTaskLater(iridiumTeams, () ->
+            player.getScheduler().runDelayed(iridiumTeams, (task) ->
                             player.sendMessage(StringUtils.color(iridiumTeams.getConfiguration().prefix + " &7Thanks for using " + iridiumTeams.getDescription().getName() + ", if you like the plugin, consider donating at " + iridiumTeams.getCommandManager().getColor() + "www.patreon.com/Peaches_MLG"))
-                    , 5);
+                    , null, 5);
         }
 
         // This isnt great, but as this requires database operations, we can pre-run it async, otherwise it will have to be loaded sync. I need to recode/rethink this eventually but this should fix some lag caused by missions for now
-        iridiumTeams.getTeamManager().getTeamViaID(user.getTeamID()).ifPresent(team -> Bukkit.getScheduler().runTaskAsynchronously(iridiumTeams, () -> iridiumTeams.getMissionManager().generateMissionData(team)));
+        iridiumTeams.getTeamManager().getTeamViaID(user.getTeamID()).ifPresent(team -> Bukkit.getAsyncScheduler().runNow(iridiumTeams, task -> iridiumTeams.getMissionManager().generateMissionData(team)));
     }
 
 }

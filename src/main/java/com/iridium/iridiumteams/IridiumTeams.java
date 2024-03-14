@@ -131,7 +131,7 @@ public abstract class IridiumTeams<T extends Team, U extends IridiumUser<T>> ext
     public abstract Settings getSettings();
 
     public void recalculateTeams() {
-        Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+        Bukkit.getGlobalRegionScheduler().runAtFixedRate(this, task ->  new Runnable() {
             ListIterator<Integer> teams = getTeamManager().getTeams().stream().map(T::getId).collect(Collectors.toList()).listIterator();
             boolean locked = false;
             int counter = 0;
@@ -161,7 +161,7 @@ public abstract class IridiumTeams<T extends Team, U extends IridiumUser<T>> ext
                     }
                 }
             }
-        }, 0, 0);
+        }.run(), 2, 1);
     }
 
     public void registerListeners() {

@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.sql.SQLException;
+import java.util.concurrent.CompletableFuture;
 
 public class LocationType extends StringType {
 
