@@ -120,10 +120,10 @@ public class IridiumUser<T extends Team> extends DatabaseObject {
                     .findFirst();
             if (potionEffect.isPresent()) {
                 if (potionEffect.get().getAmplifier() <= potionEffectType.getValue() && potionEffect.get().getDuration() <= duration * 20) {
-                    player.removePotionEffect(potionEffectType.getKey());
+                    player.getScheduler().run(IridiumTeams.getInstance(), task -> player.removePotionEffect(potionEffectType.getKey()), null);
                 }
             }
-            player.addPotionEffect(potionEffectType.getKey().createEffect(duration * 20, potionEffectType.getValue()));
+            player.getScheduler().run(IridiumTeams.getInstance(), task -> player.addPotionEffect(potionEffectType.getKey().createEffect(duration * 20, potionEffectType.getValue())), null);
         }
     }
 

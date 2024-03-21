@@ -1,5 +1,6 @@
 package com.iridium.iridiumteams.utils;
 
+import com.iridium.iridiumteams.IridiumTeams;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
@@ -60,24 +61,26 @@ public class PlayerUtils {
         if (exp < 0) {
             throw new IllegalArgumentException("Experience is negative!");
         }
+        player.getScheduler().run(IridiumTeams.getInstance(), task -> {
+            player.setExp(0);
+            player.setLevel(0);
+            player.setTotalExperience(0);
 
-        player.setExp(0);
-        player.setLevel(0);
-        player.setTotalExperience(0);
-
-        int amount = exp;
-        while (amount > 0) {
-            final int expToLevel = getExpAtLevel(player.getLevel());
-            amount -= expToLevel;
-            if (amount >= 0) {
-                // give until next level
-                player.giveExp(expToLevel);
-            } else {
-                // give the rest
-                amount += expToLevel;
-                player.giveExp(amount);
-                amount = 0;
+            int amount = exp;
+            while (amount > 0) {
+                final int expToLevel = getExpAtLevel(player.getLevel());
+                amount -= expToLevel;
+                if (amount >= 0) {
+                    // give until next level
+                    player.giveExp(expToLevel);
+                } else {
+                    // give the rest
+                    amount += expToLevel;
+                    player.giveExp(amount);
+                    amount = 0;
+                }
             }
-        }
+        }, null);
+
     }
 }
